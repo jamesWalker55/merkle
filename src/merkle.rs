@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use crate::tree::{hash_concat, hash_data, Data, Hash, Proof, Tree};
+use crate::tree::{hash_concat, hash_data, Data, Hash, HashDirection, Proof, Tree};
 
 #[derive(Debug)]
 enum MerkleNext {
@@ -12,6 +12,11 @@ enum MerkleNext {
 pub struct MerkleTree {
     hash: Hash,
     next: MerkleNext,
+}
+
+enum ChildDirection {
+    Left,
+    Right,
 }
 
 impl MerkleTree {
@@ -26,6 +31,35 @@ impl MerkleTree {
         Self {
             hash: hash_concat(&a.hash, &b.hash),
             next: MerkleNext::Nodes(a, b),
+        }
+    }
+
+    fn prove(&self, data: &Data) -> Option<Proof> {
+        let mut buf = Vec::new();
+        if !self.prove_sub(&mut buf, data) {
+            return None;
+        }
+        Some(Proof { hashes: buf })
+    }
+
+    /// Given a vector and a data, check if the children contain this data.
+    ///
+    /// If the data is found, append the path taken so far to the vector, and return true.
+    /// Otherwise, return false.
+    fn prove_sub<'a>(&'a self, buf: &mut Vec<(HashDirection, &'a Hash)>, data: &Data) -> bool {
+        match &self.next {
+            MerkleNext::Data(vec) => vec == data,
+            MerkleNext::Nodes(left, right) => {
+                if left.prove_sub(buf, data) {
+                    buf.push((HashDirection::Right, &right.hash));
+                    true
+                } else if right.prove_sub(buf, data) {
+                    buf.push((HashDirection::Left, &left.hash));
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 }
@@ -88,6 +122,6 @@ impl Tree for MerkleTree {
     }
 
     fn prove(&self, data: &Data) -> Option<Proof> {
-        todo!("Exercise 3")
+        self.prove(data)
     }
 }
