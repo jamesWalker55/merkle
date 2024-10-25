@@ -1,64 +1,11 @@
-use sha2::Digest;
-
-pub type Data = Vec<u8>;
-pub type Hash = Vec<u8>;
-
-pub struct MerkleTree {
-    // ???
-}
-
-/// Which side to put Hash on when concatinating proof hashes
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum HashDirection {
-    Left,
-    Right,
-}
-
-#[derive(Debug, Default)]
-pub struct Proof<'a> {
-    /// The hashes to use when verifying the proof
-    /// The first element of the tuple is which side the hash should be on when concatinating
-    hashes: Vec<(HashDirection, &'a Hash)>,
-}
-
-impl MerkleTree {
-    /// Gets root hash for this tree
-    pub fn root(&self) -> Hash {
-        todo!("For tests to work")
-    }
-
-    /// Constructs a Merkle tree from given input data
-    pub fn construct(input: &[Data]) -> MerkleTree {
-        todo!("Exercise 1")
-    }
-
-    /// Verifies that the given input data produces the given root hash
-    pub fn verify(input: &[Data], root_hash: &Hash) -> bool {
-        todo!("Exercise 1b")
-    }
-
-    /// Verifies that the given data and proof_path correctly produce the given root_hash
-    pub fn verify_proof(data: &Data, proof: &Proof, root_hash: &Hash) -> bool {
-        todo!("Exercise 2")
-    }
-
-    /// Returns a list of hashes that can be used to prove that the given data is in this tree
-    pub fn prove(&self, data: &Data) -> Option<Proof> {
-        todo!("Exercise 3")
-    }
-}
-
-fn hash_data(data: &Data) -> Hash {
-    sha2::Sha256::digest(data).to_vec()
-}
-
-fn hash_concat(h1: &Hash, h2: &Hash) -> Hash {
-    let h3 = h1.iter().chain(h2).copied().collect();
-    hash_data(&h3)
-}
+mod merkle;
+mod tree;
 
 #[cfg(test)]
 mod tests {
+    use merkle::MerkleTree;
+    use tree::{Data, Tree as _};
+
     use super::*;
 
     fn example_data(n: usize) -> Vec<Data> {
