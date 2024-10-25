@@ -66,7 +66,8 @@ impl Tree for MerkleTree {
     }
 
     fn verify(input: &[Data], root_hash: &Hash) -> bool {
-        todo!("Exercise 1b")
+        let tree = Self::construct(input);
+        &tree.root() == root_hash
     }
 
     fn verify_proof(data: &Data, proof: &Proof, root_hash: &Hash) -> bool {
