@@ -106,10 +106,10 @@ impl Tree for MerkleTree {
 
         for (hash_dir, other_hash) in proof.hashes.iter() {
             match hash_dir {
-                crate::tree::HashDirection::Left => {
+                HashDirection::Left => {
                     hash = hash_concat(other_hash, &hash);
                 }
-                crate::tree::HashDirection::Right => {
+                HashDirection::Right => {
                     hash = hash_concat(&hash, other_hash);
                 }
             }
