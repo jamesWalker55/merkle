@@ -8,6 +8,11 @@ mod tests {
 
     use super::*;
 
+    // root hash for 4 leaves
+    const ROOT_HASH_4: &str = "9675e04b4ba9dc81b06e81731e2d21caa2c95557a85dcfa3fff70c9ff0f30b2e";
+    // root hash for 8 leaves
+    const ROOT_HASH_8: &str = "0727b310f87099c1ba2ec0ba408def82c308237c8577f0bdfd2643e9cc6b7578";
+
     fn example_data(n: usize) -> Vec<Data> {
         let mut data = vec![];
         for i in 0..n {
@@ -20,7 +25,7 @@ mod tests {
     fn test_constructions() {
         let data = example_data(4);
         let tree = MerkleTree::construct(&data);
-        let expected_root = "9675e04b4ba9dc81b06e81731e2d21caa2c95557a85dcfa3fff70c9ff0f30b2e";
+        let expected_root = ROOT_HASH_4;
         assert_eq!(hex::encode(tree.root()), expected_root);
 
         // Uncomment if your implementation allows for unbalanced trees
@@ -31,14 +36,14 @@ mod tests {
 
         let data = example_data(8);
         let tree = MerkleTree::construct(&data);
-        let expected_root = "0727b310f87099c1ba2ec0ba408def82c308237c8577f0bdfd2643e9cc6b7578";
+        let expected_root = ROOT_HASH_8;
         assert_eq!(hex::encode(tree.root()), expected_root);
     }
 
     #[test]
     fn test_verify() {
         let data = example_data(4);
-        let expected_root = "9675e04b4ba9dc81b06e81731e2d21caa2c95557a85dcfa3fff70c9ff0f30b2e";
+        let expected_root = ROOT_HASH_4;
         assert!(MerkleTree::verify(
             &data,
             &hex::decode(expected_root).unwrap()
@@ -53,7 +58,7 @@ mod tests {
         // ));
 
         let data = example_data(8);
-        let expected_root = "0727b310f87099c1ba2ec0ba408def82c308237c8577f0bdfd2643e9cc6b7578";
+        let expected_root = ROOT_HASH_8;
         assert!(MerkleTree::verify(
             &data,
             &hex::decode(expected_root).unwrap()
@@ -77,7 +82,7 @@ mod tests {
 
         let root_hash = {
             // sanity check
-            let hash_str = "9675e04b4ba9dc81b06e81731e2d21caa2c95557a85dcfa3fff70c9ff0f30b2e";
+            let hash_str = ROOT_HASH_4;
             assert_eq!(h7, hex::decode(hash_str).unwrap());
             &h7
         };
