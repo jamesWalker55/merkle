@@ -232,6 +232,11 @@ mod tests {
         let rv = tree.prove(&a4);
         let expected = vec![(HashDirection::Left, &h3), (HashDirection::Left, &h5)];
         assert_eq!(rv, Some(Proof { hashes: expected }));
+
+        // false tests
+        assert_eq!(tree.prove(&vec![4]), None);
+        assert_eq!(tree.prove(&vec![10]), None);
+        assert_eq!(tree.prove(&vec![128]), None);
     }
 
     #[test]
@@ -287,5 +292,10 @@ mod tests {
             (HashDirection::Left, &h13),
         ];
         assert_eq!(rv, Some(Proof { hashes: expected }));
+
+        // false tests
+        assert_eq!(tree.prove(&vec![8]), None);
+        assert_eq!(tree.prove(&vec![10]), None);
+        assert_eq!(tree.prove(&vec![128]), None);
     }
 }
