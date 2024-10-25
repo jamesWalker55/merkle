@@ -57,7 +57,7 @@ fn hash_concat(h1: &Hash, h2: &Hash) -> Hash {
     hash_data(&h3)
 }
 
-#[cfg(tests)]
+#[cfg(test)]
 mod tests {
     use super::*;
 
