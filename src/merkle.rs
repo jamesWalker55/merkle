@@ -39,7 +39,9 @@ impl MerkleTree {
 
     /// Given a vector and a data, check if the children contain this data.
     ///
-    /// If the data is found, append the path taken so far to the vector, and return true.
+    /// If the data is found, append the other child's hash (e.g. if found in left node, append
+    /// right node's hash), and return true.
+    ///
     /// Otherwise, return false.
     fn prove_sub<'a>(&'a self, buf: &mut Vec<(HashDirection, &'a Hash)>, data: &Data) -> bool {
         match &self.next {
