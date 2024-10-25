@@ -233,4 +233,59 @@ mod tests {
         let expected = vec![(HashDirection::Left, &h3), (HashDirection::Left, &h5)];
         assert_eq!(rv, Some(Proof { hashes: expected }));
     }
+
+    #[test]
+    fn test_exercise_3_eightleaf() {
+        let a1 = vec![0u8];
+        let a2 = vec![1u8];
+        let a3 = vec![2u8];
+        let a4 = vec![3u8];
+        let a5 = vec![4u8];
+        let a6 = vec![5u8];
+        let a7 = vec![6u8];
+        let a8 = vec![7u8];
+        let h1 = hash_data(&a1);
+        let h2 = hash_data(&a2);
+        let h3 = hash_data(&a3);
+        let h4 = hash_data(&a4);
+        let h5 = hash_data(&a5);
+        let h6 = hash_data(&a6);
+        let h7 = hash_data(&a7);
+        let h8 = hash_data(&a8);
+        let h9 = hash_concat(&h1, &h2);
+        let h10 = hash_concat(&h3, &h4);
+        let h11 = hash_concat(&h5, &h6);
+        let h12 = hash_concat(&h7, &h8);
+        let h13 = hash_concat(&h9, &h10);
+        let h14 = hash_concat(&h11, &h12);
+        let h15 = hash_concat(&h13, &h14);
+        let tree = MerkleTree::construct(&example_data(8));
+
+        // H1 ; [(1, H2), (1, H10), (1, H14)]
+        let rv = tree.prove(&a1);
+        let expected = vec![
+            (HashDirection::Right, &h2),
+            (HashDirection::Right, &h10),
+            (HashDirection::Right, &h14),
+        ];
+        assert_eq!(rv, Some(Proof { hashes: expected }));
+
+        // H4 ; [(0, H3), (0, H9), (1, H14)]
+        let rv = tree.prove(&a4);
+        let expected = vec![
+            (HashDirection::Left, &h3),
+            (HashDirection::Left, &h9),
+            (HashDirection::Right, &h14),
+        ];
+        assert_eq!(rv, Some(Proof { hashes: expected }));
+
+        // H7 ; [(1, H8), (0, H11), (0, H13)]
+        let rv = tree.prove(&a7);
+        let expected = vec![
+            (HashDirection::Right, &h8),
+            (HashDirection::Left, &h11),
+            (HashDirection::Left, &h13),
+        ];
+        assert_eq!(rv, Some(Proof { hashes: expected }));
+    }
 }
