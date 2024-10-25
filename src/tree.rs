@@ -14,7 +14,7 @@ pub enum HashDirection {
 pub struct Proof<'a> {
     /// The hashes to use when verifying the proof
     /// The first element of the tuple is which side the hash should be on when concatinating
-    hashes: Vec<(HashDirection, &'a Hash)>,
+    pub hashes: Vec<(HashDirection, &'a Hash)>,
 }
 
 pub trait Tree {

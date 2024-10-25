@@ -71,7 +71,20 @@ impl Tree for MerkleTree {
     }
 
     fn verify_proof(data: &Data, proof: &Proof, root_hash: &Hash) -> bool {
-        todo!("Exercise 2")
+        let mut hash = hash_data(data);
+
+        for (hash_dir, other_hash) in proof.hashes.iter() {
+            match hash_dir {
+                crate::tree::HashDirection::Left => {
+                    hash = hash_concat(&other_hash, &hash);
+                }
+                crate::tree::HashDirection::Right => {
+                    hash = hash_concat(&hash, &other_hash);
+                }
+            }
+        }
+
+        &hash == root_hash
     }
 
     fn prove(&self, data: &Data) -> Option<Proof> {
