@@ -14,11 +14,6 @@ pub struct MerkleTree {
     next: MerkleNext,
 }
 
-enum ChildDirection {
-    Left,
-    Right,
-}
-
 impl MerkleTree {
     fn new_from_data(data: Data) -> Self {
         Self {
